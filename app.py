@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
-
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -8,7 +8,11 @@ app = FastAPI()
 
 class Item(BaseModel):
     item_id: int
+templates = Jinja2Templates(directory="templates")
 
+@app.get("/mine")
+async def read_hello_world(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/")
 async def root():
